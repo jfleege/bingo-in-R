@@ -4,7 +4,7 @@
 #-----------------------------------------------------------#
 
 # creates a vector of 100 numbers that will be used to populates the players bingo card
-number_pool <- c(1:100)
+number_pool <- c(1:60)
 
 # samples the number pool with 25 numbers, making the players card
 rough_player_card <- sample(number_pool, 25)
@@ -26,9 +26,9 @@ number_called <- number_pool
 
 # creates a function that removes a number from the card if matched
 called_number <- function() {
-  sample(number_called, 1, replace = FALSE)
-  number_called <<- number_called[number_called != called_number]
-  return(called_number)
+  drawn <- sample(number_called, 1, replace = FALSE)
+  number_called <<- number_called[number_called != drawn]
+  return(drawn)
 }
 
 # checks the number against the players card and if matched marks with an X
@@ -54,3 +54,30 @@ check_for_bingo <- function(card) {
 }
 
 #-----------------------------------------------------------#
+
+# loops the above functions
+while (TRUE) {
+  next_called_number <- called_number()
+  
+  # prints if all numbers have been drawn and there still hasn't been a bingo
+  if (length(number_called) == 0) {
+    cat("No more numbers left to call. Thank you for playing today. Game Over! \n")
+    break
+  }
+  
+  cat("... and the next number is ....", next_called_number, "\n")
+  
+  # updates player card accordingly
+  player_card <- mark_card(player_card, next_called_number)
+  print(player_card)
+  
+  # cross check for bingo win condition
+  if (check_for_bingo(player_card)) {
+    cat("WE HAVE A BINGO!!! May the winner please come up and collect their prize! \n")
+    break
+  }
+  
+  # calls next number
+  readline(prompt = "Please press the ENTER button to call the next number.")
+}
+
