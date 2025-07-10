@@ -3,90 +3,123 @@
 
 #-----------------------------------------------------------#
 
-# loops the above functions to play a game of bingo
-play_bingo <- function() {
-  
-  # creates a vector of 50 numbers that will be used to populates the players bingo card
+# asks how many players will be playing
+get_number_of_players <- function() {
+  num <- as.numeric(readline("How many people will be playing today? (1 or 2): "))
+  if (is.na(num) || !(num %in% c(1, 2))) {
+    cat("Invalid input. Starting a 1 player game.\n")
+    num <- 1
+  }
+  return(num)
+}
+
+# helper function to create a bingo board
+create_board <- function() {
   number_pool <- c(1:50)
-  
-  # samples the number pool with 25 numbers, making the players card
   rough_player_card <- sample(number_pool, 25)
-  
-  # makes the card fancier for aesthetic 
   card_banner <- list(c("B", "I", "N", "G", "O"), c("B", "I", "N", "G", "O"))
-  
-  # builds the players card with the sample from the number pool
   temp_player_card <- matrix(data = rough_player_card, nrow = 5, ncol = 5, byrow = FALSE, dimnames = card_banner)
   temp_player_card[3,3] <- "FREE"
-  
-  # transforms the data into a proper data frame
-  player_card <- as.data.frame(temp_player_card)
-  
-  # draws numbers that will be used to cross check with the players card
-  number_called <- number_pool
-  
-  # creates a function that removes a number from the card if matched
-  called_number <- function() {
-    drawn <- sample(number_called, 1, replace = FALSE)
-    number_called <<- number_called[number_called != drawn]
-    return(drawn)
-  }
-  
-  # checks the number against the players card and if matched marks with an X
-  mark_card <- function(card, number) {
-    card[card == number] <- "X"
-    return(card)
-  }
-  
-  # checks for a bingo
-  check_for_bingo <- function(card) {
-    is_bingo <- function(line) all(line == "X" | line == "FREE")
-    
-    # checks for a bingo in rows or columns
-    rows_bingo <- any(apply(card, 1, is_bingo))
-    cols_bingo <- any(apply(card, 2, is_bingo))
-    
-    # checks diagonals for bingo
-    diag1 <- diag(as.matrix(card))
-    diag2 <- diag(as.matrix(card)[, ncol(card):1])
-    diag_bingo <- is_bingo(diag1) || is_bingo(diag2)
-    
-    return(rows_bingo || cols_bingo || diag_bingo)
-  }
-  
+  return(as.data.frame(temp_player_card))
+}
 
-  while (TRUE) {
-    next_called_number <- called_number()
+# marks a card if number matches
+mark_card <- function(card, number) {
+  card[card == number] <- "X"
+  return(card)
+}
+
+# checks if a card has a bingo
+check_for_bingo <- function(card) {
+  is_bingo <- function(line) all(line == "X" | line == "FREE")
+  rows_bingo <- any(apply(card, 1, is_bingo))
+  cols_bingo <- any(apply(card, 2, is_bingo))
+  diag1 <- diag(as.matrix(card))
+  diag2 <- diag(as.matrix(card)[, ncol(card):1])
+  diag_bingo <- is_bingo(diag1) || is_bingo(diag2)
+  return(rows_bingo || cols_bingo || diag_bingo)
+}
+
+#-----------------------------------------------------------#
+
+# loops the above functions to play a game of bingo
+play_bingo <- function() {
+  repeat {
+    # grabs the number of players for the game
+    number_of_players <- get_number_of_players()
     
-    # prints if all numbers have been drawn and there still hasn't been a bingo
-    if (length(number_called) == 0) {
-      cat("No more numbers left to call. Thank you for playing today. Game Over! \n")
-      break
+    # makes the player's boards
+    player_cards <- list()
+    for (i in 1:number_of_players) {
+      player_cards[[i]] <- create_board()
     }
     
-    cat("... and the next number is ....", next_called_number, "\n")
+    # manufactures a number pool that that players will play with
+    number_pool <- 1:50
     
-    # updates player card accordingly
-    player_card <- mark_card(player_card, next_called_number)
-    print(player_card)
-    
-    # cross check for bingo win condition
-    if (check_for_bingo(player_card)) {
-      cat("WE HAVE A BINGO!!! May the winner please come up and collect their prize! \n")
-      break
+    # draws numbers that will be used to cross check with the players card
+    called_number <- function() {
+      drawn <- sample(number_pool, 1)  # draw one random number
+      number_pool <<- setdiff(number_pool, drawn)  # remove drawn number from pool
+      return(drawn)
     }
     
-    # calls next number
-    readline(prompt = "Please press the ENTER button to call the next number.")
-  }
-  
-  # prompts the player to restart the game if they'd like
-  restart <- readline(prompt = "Would you like to play again? (Y/N): ")
-  if(tolower(restart) == "y") {
-    cat("Beginning new game shortly. Get your cards ready!! \n")
-    play_bingo()
-  } else {
-    cat("Thank you for playing! Have a great day! \n")
+    # gameplay loops; repeats the functions until there's an outcome
+    while (TRUE) {
+      if (length(number_pool) == 0) {
+        cat("No more numbers left to call. Thank you for playing today. Game Over! \n")
+        break
+      }
+      
+      # draws the next number
+      next_called_number <- called_number()
+      cat("\n... and the next number is ....", next_called_number, "\n")
+      
+      # fills X's in spots necessary
+      for (i in 1:number_of_players) {
+        player_cards[[i]] <- mark_card(player_cards[[i]], next_called_number)
+      }
+      
+      # prints the live boards
+      cat("\nUpdated Board(s):\n")
+      if (number_of_players == 2) {
+        # combines tue player boards side by side with a spacer
+        combined_boards <- cbind(
+          Player1 = as.matrix(player_cards[[1]]),
+          " " = rep("", 5),  # spacer column for readability
+          Player2 = as.matrix(player_cards[[2]])
+        )
+        print(as.data.frame(combined_boards), row.names = FALSE)
+      } else {
+        # if there's only one player, print their board regularly
+        print(player_cards[[1]])
+      }
+      
+      # checks win condition
+      winner_found <- FALSE
+      for (i in 1:number_of_players) {
+        if (check_for_bingo(player_cards[[i]])) {
+          cat("\n WE HAVE A BINGO!!! Player", i, "wins! \n")
+          winner_found <- TRUE
+          break
+        }
+      }
+      
+      # if there's a winner, breaks from running so that the game ends
+      if (winner_found) break
+      
+      # draws next number
+      readline(prompt = "Please press ENTER to call the next number.")
+    }
+    
+    # ask player(s) if they would like to play again
+    restart <- readline(prompt = "\nWould you like to play again? (Y/N): ")
+    if (tolower(restart) != "y") {
+      cat("Thank you for playing! Have a great day! \n")
+      break
+    } else {
+      cat("\nBeginning new game shortly. Get your cards ready!! \n")
+    }
   }
 }
 
@@ -94,4 +127,3 @@ play_bingo <- function() {
 
 # start game
 play_bingo()
-
