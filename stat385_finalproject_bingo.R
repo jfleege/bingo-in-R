@@ -37,4 +37,20 @@ mark_card <- function(card, number) {
   return(card)
 }
 
+# checks for a bingo
+check_for_bingo <- function(card) {
+  is_bingo <- function(line) all(line == "X" | line == "FREE")
+  
+  # checks for a bingo in rows or columns
+  rows_bingo <- any(apply(card, 1, is_bingo))
+  cols_bingo <- any(apply(card, 2, is_bingo))
+  
+  # checks diagonals for bingo
+  diag1 <- diag(as.matrix(card))
+  diag2 <- diag(as.matrix(card)[, ncol(card):1])
+  diag_bingo <- is_bingo(diag1) || is_bingo(diag2)
+  
+  return(rows_bingo || cols_bingo || diag_bingo)
+}
 
+#-----------------------------------------------------------#
