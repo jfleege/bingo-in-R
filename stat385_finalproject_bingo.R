@@ -83,7 +83,7 @@ play_bingo <- function() {
       # prints the live boards
       cat("\nUpdated Board(s):\n")
       if (number_of_players == 2) {
-        # combines tue player boards side by side with a spacer
+        # combines the player boards side by side with a spacer
         combined_boards <- cbind(
           Player1 = as.matrix(player_cards[[1]]),
           " " = rep("", 5),  # spacer column for readability
