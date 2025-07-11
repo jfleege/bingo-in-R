@@ -1,25 +1,24 @@
 # Bingo in R! 
-This game will eventually be fully functional. As of now, I currently have implemented the player card and am working on drawing numbers from a pool. This project started from a class I took in college (still in progress).
+This game will eventually be fully functional. As of now, I currently have implemented a high score feature. The only other thing that I plan on adding to the game is a tracker that detects how far a user is away from a bingo because it's not so apparent in the R console.
+
 
 
 ## How It's Made:
-Tech used: R, HTML
+Tech used: R
 
-Here's where you can go to town on how you actually built this thing. Write as much as you can here, it's totally fine if it's not too much just make sure you write something. If you don't have too much experience on your resume working on the front end that's totally fine. This is where you can really show off your passion and make up for that ten fold.
+This project first started from a class I took at the University of Illinois Urbana-Champaign, STAT 385, which was/is titled Statistical Programming Methods. The "final" for the course required us to make our own game in R, taking tools that we learned throughout the course and commanded us to use them. When thinking about a game to make, I decided that Bingo would be a somewhat decent challenge to test my coding capabilities for my first independent coding project. Stepping through the progress, I first developed the player card and number pool system; making sure to start out with the basics. As I found my footing, I grew more comfortable testing my skills as I eventually incuded more and more features.
 
-Optimizations
-(optional)
 
-You don't have to include this section but interviewers love that you can not only deliver a final product that looks great but also functions efficiently. Did you write something then refactor it later and the result was 5x faster than the original implementation? Did you cache your assets? Things that you write in this section are GREAT to bring up in interviews and you can use this section as reference when studying for technical interviews!
+## Optimizations and Features
 
-Lessons Learned:
-No matter what your experience level, being an engineer means continuously learning. Every time you build something you always have those whoa this is awesome or wow I actually did it! moments. This is where you should share those moments! Recruiters and interviewers love to see that you're self-aware and passionate about growing.
+- a 1 or 2 player option
+- option to play more than one game
+- move tracker
+- high score tracker
 
-Examples:
-Take a look at these couple examples that I have in my own portfolio:
+### **looking to add moves till bigno feature
 
-Palettable: https://github.com/alecortega/palettable
 
-Twitter Battle: https://github.com/alecortega/twitter-battle
+## Lessons Learned:
+The biggest lesson I learned with this project is to make sure that I give myself time. Whether it means taking the time to make sure my code runs, or actually spending time away from the code itself to make sure my ideas remain fresh, I must allow myself some grace.
 
-Patch Panel: https://github.com/alecortega/patch-panel
