@@ -40,6 +40,9 @@ check_for_bingo <- function(card) {
   return(rows_bingo || cols_bingo || diag_bingo)
 }
 
+# initializes the high score so that it can be eventually tracked
+high_score <- NULL
+
 #-----------------------------------------------------------#
 
 # loops the above functions to play a game of bingo
@@ -109,6 +112,16 @@ play_bingo <- function() {
           cat("\n WE HAVE A BINGO!!! Player", i, "wins! \n")
           winner_found <- TRUE
           break
+        }
+      }
+      
+      # updates the high score once a winner is found
+      if (winner_found) {
+        if (is.null(high_score) || move_count < high_score) {
+          high_score <<- move_count
+          cat("NEW HIGH SCORE! Winner in", high_score, "moves! \n")
+        } else {
+          cat("Score to beat:", high_score, "moves\n")
         }
       }
       
