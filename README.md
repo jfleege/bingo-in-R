@@ -16,7 +16,7 @@ This project first started from a class I took at the University of Illinois Urb
 - move tracker
 - high score tracker
 
-### **looking to add moves till bigno feature
+### **looking to add moves till bingo feature
 
 
 ## Lessons Learned:
