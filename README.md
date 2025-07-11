@@ -16,8 +16,6 @@ This project began with a class I took at the University of Illinois Urbana-Cham
 - move tracker
 - high score tracker
 
-### **looking to add moves till bingo feature
-
 
 ## Lessons Learned:
 The biggest lesson I learned from this project is to make sure that I give myself time. Whether it means taking the time to make sure my code runs or spending time away from the code itself to make sure my ideas remain fresh, I must allow myself some grace.
