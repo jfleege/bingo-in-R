@@ -64,6 +64,9 @@ play_bingo <- function() {
       return(drawn)
     }
     
+    # initializes the move count so that it starts at 0 every game
+    move_count <- 0
+    
     # gameplay loops; repeats the functions until there's an outcome
     while (TRUE) {
       if (length(number_pool) == 0) {
@@ -74,6 +77,10 @@ play_bingo <- function() {
       # draws the next number
       next_called_number <- called_number()
       cat("\n... and the next number is ....", next_called_number, "\n")
+      
+      # keeps track of the number of moves peformed each game
+      move_count <- move_count + 1
+      cat("Move number: ", move_count, "\n")
       
       # fills X's in spots necessary
       for (i in 1:number_of_players) {
@@ -125,5 +132,5 @@ play_bingo <- function() {
 
 #-----------------------------------------------------------#
 
-# start game
+# run this line to start the game
 play_bingo()
