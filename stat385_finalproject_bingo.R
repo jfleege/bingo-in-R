@@ -17,10 +17,23 @@ get_number_of_players <- function() {
 create_board <- function() {
   number_pool <- c(1:50)
   rough_player_card <- sample(number_pool, 25)
-  card_banner <- list(c("B", "I", "N", "G", "O"), c("B", "I", "N", "G", "O"))
-  temp_player_card <- matrix(data = rough_player_card, nrow = 5, ncol = 5, byrow = FALSE, dimnames = card_banner)
+  
+  temp_player_card <- matrix(
+    data = rough_player_card, 
+    nrow = 5, ncol = 5, 
+    byrow = FALSE
+  )
+  
+  # set column names for B I N G O
+  colnames(temp_player_card) <- c("B", "I", "N", "G", "O")
+  
+  # add FREE space in the middle
   temp_player_card[3,3] <- "FREE"
-  return(as.data.frame(temp_player_card))
+  
+  # convert to data frame without row names
+  temp_player_card <- as.data.frame(temp_player_card, row.names = NULL)
+  
+  return(temp_player_card)
 }
 
 # marks a card if number matches
@@ -117,18 +130,12 @@ play_bingo <- function() {
       }
       
       # prints the live boards
-      cat("\nUpdated Board(s):\n")
-      if (number_of_players == 2) {
-        # combines the player boards side by side with a spacer
-        combined_boards <- cbind(
-          Player1 = as.matrix(player_cards[[1]]),
-          " " = rep("", 5),  # spacer column for readability
-          Player2 = as.matrix(player_cards[[2]])
-        )
-        print(as.data.frame(combined_boards), row.names = FALSE)
-      } else {
-        # if there's only one player, print their board regularly
-        print(player_cards[[1]])
+      cat("\n================== PLAYER BOARDS ==================\n\n")
+      
+      for (i in 1:number_of_players) {
+        cat("========== PLAYER", i, "==========\n")
+        print(player_cards[[i]], row.names = FALSE)
+        cat("\n")  # spacer between boards
       }
       
       # tracks how many moves a player has until they win the game
