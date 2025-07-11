@@ -40,6 +40,32 @@ check_for_bingo <- function(card) {
   return(rows_bingo || cols_bingo || diag_bingo)
 }
 
+# tracks how many moves a player has until they win the game
+moves_till_bingo <- function(card) {
+  counts <- c()
+  
+  # checks the number of unmarked spaces in the rows
+  for (r in 1:nrow(card)) {
+    line <- card[r, ]
+    counts <- c(counts, sum(line != "X" & line != "FREE"))
+  }
+  
+  # checks the number of unmarked spaces in the columns
+  for (c in 1:ncol(card)) {
+    line <- card[, c]
+    counts <- c(counts, sum(line != "X" & line != "FREE"))
+  }
+  
+  # checks the number of unmarked spaces in the diagonals
+  diag1 <- diag(as.matrix(card))
+  diag2 <- diag(as.matrix(card)[, ncol(card):1])
+  counts <- c(counts,
+              sum(diag1 != "X" & diag1 != "FREE"),
+              sum(diag2 != "X" & diag2 != "FREE"))
+  
+  return(min(counts))
+}
+
 # initializes the high score so that it can be eventually tracked
 high_score <- NULL
 
@@ -103,6 +129,13 @@ play_bingo <- function() {
       } else {
         # if there's only one player, print their board regularly
         print(player_cards[[1]])
+      }
+      
+      # tracks how many moves a player has until they win the game
+      cat("\nMoves till Bingo:\n")
+      for (i in 1:number_of_players) {
+        m_t_b <- moves_till_bingo(player_cards[[i]])
+        cat("Player", i, "needs", m_t_b, "more move(s) to win!\n")
       }
       
       # checks win condition
