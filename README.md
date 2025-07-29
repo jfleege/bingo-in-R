@@ -1,5 +1,5 @@
 # Bingo in R! 
-This game will eventually be fully functional. Currently, I have implemented a high score feature. The only other thing I plan to add to the game is a tracker that detects how far a user is from a bingo, as it's not so apparent in the R console.
+After finshing the bingo detector, I believe I am finished implementing my game. Feel free to implement any new optimizations or features as needed.
 
 
 
@@ -15,6 +15,7 @@ This project began with a class I took at the University of Illinois Urbana-Cham
 - option to play more than one game
 - move tracker
 - high score tracker
+- bingo detector
 
 
 ## Lessons Learned:
