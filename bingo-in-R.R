@@ -1,8 +1,5 @@
-## STAT385 Final Project - Bingo ##
+## Bingo in R ##
 # Jackson Fleege #
-
-# presentation link can be accessed here:
-# https://drive.google.com/file/d/1U9aoijZq-dZPMHMMHJWvUOByBxp_O-i2/view?usp=drive_link
 
 #-----------------------------------------------------------#
 
@@ -85,6 +82,9 @@ moves_till_bingo <- function(card) {
 # initializes the high score so that it can be eventually tracked
 high_score <- NULL
 
+# potential default names if not specified
+default_names <- c("Mitch", "Pops", "Mordecai", "Rigby", "Benson", "Skips")
+
 #-----------------------------------------------------------#
 
 # loops the above functions to play a game of bingo
@@ -92,6 +92,26 @@ play_bingo <- function() {
   repeat {
     # grabs the number of players for the game
     number_of_players <- get_number_of_players()
+    
+    # player naming option for unique player names
+    player_names <- character(number_of_players)
+    
+    for (i in 1:number_of_players) {
+      name_input <- readline(paste("Enter name for Player", i, "(or press ENTER for a random name): "))
+      
+      if (name_input == "") {
+        # assigns unused name
+        available_names <- setdiff(default_names, player_names)
+        if (length(available_names) == 0) {
+          name_input <- paste("Player", i)  # fallback if all default names are taken
+        } else {
+          name_input <- sample(available_names, 1)
+        }
+      }
+      
+      player_names[i] <- name_input
+      cat(">>>", player_names[i], "'s Board <<<\n")
+    }
     
     # makes the player's boards
     player_cards <- list()
@@ -136,7 +156,7 @@ play_bingo <- function() {
       cat("\n================== PLAYER BOARDS ==================\n\n")
       
       for (i in 1:number_of_players) {
-        cat("========== PLAYER", i, "==========\n")
+        cat("==========", player_names[i], "==========\n")
         print(player_cards[[i]], row.names = FALSE)
         cat("\n")  # spacer between boards
       }
@@ -152,7 +172,7 @@ play_bingo <- function() {
       winner_found <- FALSE
       for (i in 1:number_of_players) {
         if (check_for_bingo(player_cards[[i]])) {
-          cat("\n WE HAVE A BINGO!!! Player", i, "wins! \n")
+          cat("\n WE HAVE A BINGO!!!", player_names[i], "wins! \n")
           winner_found <- TRUE
           break
         }
